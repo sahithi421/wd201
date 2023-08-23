@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<title>Form Validation</title>
+  </head>
+<style>
+.container {
+ height:60%;
+width:40%;
+margin:0 auto;
+padding:20px;
+border :1 px solid black;
+line-height: 1.5;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+input:focus {
+  border: 2px solid #f2796e;
+}
+button {
+  background-color: Green;
+  padding: 15px 30px;
+}
+table {
+  width: 100%;
+  border: 1px solid;
+}
+th,td{
+border: 1px solid;
+text-align:center
+}
+</style>
+
+  <body>
+<center>
+ <form id="form">
+ <div class="container">
+ <center> <h1>Registration form</h1></center>
+
+        <div>
+          <label for="username">User Name</label>
+          <input
+            required type="Text"
+            name="username"
+            id="name"/><br><br>
+          <label for="email">Email</label>
+          <input
+            required type="email"
+            name="email"
+            id="email"
+            placeholder="abc@gmail.com"
+          />
+<br><br>
+          <label for="password">Password</label>
+          <input
+          required  type="password"
+            name="password"
+            id="password"
+            placeholder="Password here"
+          /><br><br>
+<label for="dob">Date of Birth</label>
+   <input required type="date" id="dob" name="dob" min="1968-08-09" max="2005-08-07"/><br><br>
+     <input required type="checkbox" id="acceptTerms" name="acceptTerms"><br><br>
+   <label for="acceptTerms">Accept Terms & Conditions</label><br><br>
+        <button type="submit" id="submit">Submit</button>
+
+      </form>
+</div>
+
+<div>
+<center>
+<h2>Entries</h2></center>
+<div id="User-details">
+</div>
+</div>
+
+
+
+<script>
+let user_det=document.getElementById("form");
+const retent=()=>{
+let ent =localStorage.getItem("user-details");
+if(ent){
+ent=JSON.parse(ent);
+}
+else{
+ent=[];
+}
+return ent;
+}
+let userDet=retent();
+
+const dispent=()=>{
+const ent=retent();
+let tableEntries='';
+for(const entry of ent){
+const nameCell=`<td>${entry.name}</td>`;
+const emailCell=`<td>${entry.email}</td>`;
+const passwordCell=`<td>${entry.password}</td>`;
+const dobCell=`<td>${entry.dob}</td>`;
+const acceptCell=`<td>${entry.acceptTerms?'true':'false'}</td>`;
+const row=`<tr>${nameCell}${emailCell}${passwordCell}${dobCell}${acceptCell}</tr>`;
+tableEntries+=row;
+}
+const table=`<table><tr><th>Name</th><th>Mail</th><th>Password</th><th>DOB</th><th>Accepted terms?</th></tr>${tableEntries}</table>`;
+let details=document.getElementById("user-details");
+details.innerHTML=table;
+}
+const SaveDet=(event)=>{
+event.preventDefault();
+const name=document.getElementById("username").value;
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+const dob=document.getElementById("dob").value;
+const acceptTerms=document.getElementById("acceptTerms").checked;
+const entry={
+name,email,password,dob,acceptTerms
+};
+userDet.push(entry);
+localStorage.setItem("User-details",JSON.stringify(userDet));
+dispent();
+}
+user_det.addEventListener("submit",SaveDet);
+dispent();
+</script>
+
+</body>
+</html>
